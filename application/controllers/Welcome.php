@@ -1,25 +1,64 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Welcome extends CI_Controller {
-
-	/**
-	 * Index Page for this controller.
-	 *
-	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
-	 *	- or -
-	 * 		http://example.com/index.php/welcome/index
-	 *	- or -
-	 * Since this controller is set as the default controller in
-	 * config/routes.php, it's displayed at http://example.com/
-	 *
-	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
-	 * @see https://codeigniter.com/userguide3/general/urls.html
-	 */
+class Welcome extends CI_Controller
+{
 	public function index()
 	{
-		$this->load->view('welcome_message');
+		$kode = $this->input->get('kode');
+
+		if (empty($kode)) {
+			if ($kode = $this->session->userdata('request_kode_pengisian')) {
+				$this->session->unset_userdata('request_kode_pengisian');
+			}
+		}
+
+		if ($kode) {
+			if (!$this->session->has_userdata('id_user')) 
+			{
+				$this->session->set_userdata('request_kode_pengisian', $kode);
+
+				return redirect('login');
+			}
+
+			if ($this->pengisian_model->exists(['kode_pengisian' => $kode])) {
+				$this->pengisian_model->add_user_to_pengisian(['kode_pengisian' => $kode], ['id_user' => $this->session->userdata('id_user')]);
+
+				redirect('game');
+			}
+			
+			redirect('welcome');
+		}
+
+		$data = [];
+
+		if ($this->session->has_userdata('id_user')) {
+			$data['pengisian'] = $this->pengisian_model->where(['id_user' => $this->session->userdata('id_user')])->latest()->all();
+		}
+
+		$this->template->render_app('welcome_message', $data);
+	}
+
+	public function harga()
+	{
+		$this->template->render_app('harga');
+	}
+
+	public function login()
+	{
+		if ($this->session->has_userdata('id_user')) {
+			redirect('/');
+		}
+
+		$this->template->render_app('auth/login');
+	}
+
+	public function register()
+	{
+		if ($this->session->has_userdata('id_user')) {
+			redirect('/');
+		}
+
+		$this->template->render_app('auth/register');
 	}
 }
