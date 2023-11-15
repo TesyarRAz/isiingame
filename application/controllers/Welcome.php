@@ -36,7 +36,9 @@ class Welcome extends CI_Controller
 			$data['pengisian'] = $this->pengisian_model->where(['id_user' => $this->session->userdata('id_user')])->latest()->all();
 		}
 
-		$this->template->render_app('welcome_message', $data);
+		$this->template->render_app('welcome_message', $data, [
+			$this->template->render_css_href('/assets/css/welcome.css')
+		]);
 	}
 
 	public function harga()

@@ -1,9 +1,9 @@
 <main class="container my-auto">
 	<form class="mt-5" action="<?= site_url('/') ?>" method="GET">
 		<div class="mb-2 text-center">
-			<label for="kode-pengisian" class="h4 mb-4">Kode Pengisian</label>
+			<label for="kode-pengisian" class="h4 mb-4 text-white">Kode Pengisian</label>
 			<input name="kode" id="kode-pengisian" type="text" class="form-control form-control-lg mb-2" placeholder="Masukan Kode Pengisian">
-			<button class="btn btn-outline-dark">
+			<button class="btn btn-light">
 				<i class="fa fa-fw fa-gamepad"></i>
 				Atur Game
 			</button>
@@ -12,7 +12,7 @@
 
 	<?php if (!empty($pengisian)) : ?>
 		<div class="mt-5">
-			<h4>Riwayat Pengisian</h4>
+			<h4 class="bg-white d-inline-block p-2 rounded">Riwayat Pengisian</h4>
 			<div class="row">
 				<?php foreach ($pengisian as $item) : ?>
 					<div class="col-lg-3 col-md-4 col-6">

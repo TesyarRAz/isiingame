@@ -28,6 +28,11 @@ class Template
         ]);
     }
 
+    public function render_css_href($url)
+    {
+        return '<link href="' . $url . '" rel="stylesheet">';
+    }
+
     public function setup_pagination($config)
     {
         $config['full_tag_open'] = '<ul class="pagination">';
